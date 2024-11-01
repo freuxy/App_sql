@@ -7,23 +7,12 @@ import duckdb
 import pandas as pd
 import streamlit as st
 
-CSV = """
-beverage,price
-orange juice,2.5
-Expresso,2
-Tea,3
-"""
+from init_db import food_items
 
-beverages = pd.read_csv(io.StringIO(CSV))
+con= duckdb.connect(database="data/exo_sql.duckdb", read_only=False)
 
-CSV2 = """
-food_item,food_price
-cookie juice,2.5
-chocolatine,2
-muffin,3
-"""
-
-food_items = pd.read_csv(io.StringIO(CSV2))
+beverages = con.execute("SELECT * FROM beverages").df()
+food_items = con.execute("SELECT * FROM food_items").df()
 
 ANSWER_DF = """
 SELECT *
@@ -31,11 +20,22 @@ FROM beverages
 CROSS JOIN food_items
 
 """
+
 solution_df = duckdb.sql(ANSWER_DF).df()
 st.write("SQL coach vous accompagne dans la révision de vos requêtes")
 
 
 query = st.text_area(label="Veuillez saisir votre requête", key="user_input")
+
+with st.sidebar:
+    theme = st.selectbox(
+        "Quelle notion voulez-vous apprendre?",
+        ("cross_join", "CTE", "Windows functions"),
+    )
+    st.write("Vous avez choisi:", theme)
+    exercice = con.execute(f"SELECT * FROM memory_state_df WHERE theme = '{theme}' ").df()
+    st.write(exercice)
+
 
 if query:
     res = duckdb.sql(query).df()
@@ -59,12 +59,7 @@ if query:
         )
 
 
-with st.sidebar:
-    option = st.selectbox(
-        "Quelle notion voulez-vous apprendre?",
-        ("Groupy", "CTE", "Windows functions"),
-    )
-    st.write("Vous avez choisi:", option)
+
 
 tab2, tab3 = st.tabs(["Tables", "solution_dfs"])
 
@@ -78,3 +73,5 @@ with tab2:
 
 with tab3:
     st.write(ANSWER_DF)
+
+

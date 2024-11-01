@@ -60,8 +60,3 @@ with tab2:
 
 with tab3:
   st.write(answer)
-
-#try:
-#  st.write(res)
-#except Exception as e:
-#  st.write("Exception:", e)

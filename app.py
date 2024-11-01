@@ -36,7 +36,6 @@ st.write("SQL coach vous accompagne dans la révision de vos requêtes")
 
 query=st.text_area(label="Veuillez saisir votre requête", key="user_input")
 
-
 if query:
   res = duckdb.sql(query).df()
   st.dataframe(res)

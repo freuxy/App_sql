@@ -1,15 +1,11 @@
 # pylint: disable=missing-module-docstring
 # from warnings import catch_warnings
 
-import io
-
 import duckdb
 import pandas as pd
 import streamlit as st
 
-from init_db import food_items
-
-con= duckdb.connect(database="data/exo_sql.duckdb", read_only=False)
+con = duckdb.connect(database="data/exo_sql.duckdb", read_only=False)
 
 beverages = con.execute("SELECT * FROM beverages").df()
 food_items = con.execute("SELECT * FROM food_items").df()
@@ -33,7 +29,9 @@ with st.sidebar:
         ("cross_join", "CTE", "Windows functions"),
     )
     st.write("Vous avez choisi:", theme)
-    exercice = con.execute(f"SELECT * FROM memory_state_df WHERE theme = '{theme}' ").df()
+    exercice = con.execute(
+        f"SELECT * FROM memory_state_df WHERE theme = '{theme}' "
+    ).df()
     st.write(exercice)
 
 
@@ -59,8 +57,6 @@ if query:
         )
 
 
-
-
 tab2, tab3 = st.tabs(["Tables", "solution_dfs"])
 
 with tab2:
@@ -73,5 +69,3 @@ with tab2:
 
 with tab3:
     st.write(ANSWER_DF)
-
-

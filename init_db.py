@@ -26,12 +26,14 @@ muffin,3
 food_items = pd.read_csv(io.StringIO(CSV2))
 con.execute("CREATE TABLE IF NOT EXISTS food_items AS SELECT * FROM food_items")
 
-data= {
-    "theme":["cross_join"],
+data = {
+    "theme": ["cross_join"],
     "exercice_name": ["beverages and food"],
-    "tables":[["beverages","food_items"]],
-    "last_reviewed" : ["1980-01-01"]
+    "tables": [["beverages", "food_items"]],
+    "last_reviewed": ["1980-01-01"],
 }
 
-memory_state_df=pd.DataFrame(data)
-con.execute("CREATE TABLE IF NOT EXISTS memory_state_df AS SELECT * from memory_state_df")
+memory_state_df = pd.DataFrame(data)
+con.execute(
+    "CREATE TABLE IF NOT EXISTS memory_state_df AS SELECT * from memory_state_df"
+)

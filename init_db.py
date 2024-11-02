@@ -4,7 +4,9 @@ import pandas as pd
 
 con = duckdb.connect(database="data/exo_sql.duckdb", read_only=False)
 
+# *********************************************************************
 # CROSS JOIN EXERCICES
+# *********************************************************************
 
 CSV = """
 beverage,price
@@ -27,11 +29,12 @@ food_items = pd.read_csv(io.StringIO(CSV2))
 con.execute("CREATE TABLE IF NOT EXISTS food_items AS SELECT * FROM food_items")
 
 data = {
-    "theme": ["cross_join"],
-    "exercice_name": ["beverages and food"],
-    "tables": [["beverages", "food_items"]],
-    "last_reviewed": ["1980-01-01"],
+    "theme": ["cross_join", "window_functions"],
+    "exercice_name": ["beverages and food", "banking"],
+    "tables": [["beverages", "food_items"], ["simple"]],
+    "last_reviewed": ["1980-01-01", "1980-01-01"],
 }
+
 
 memory_state_df = pd.DataFrame(data)
 con.execute(

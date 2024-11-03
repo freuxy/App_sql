@@ -1,10 +1,22 @@
 # pylint: disable=missing-module-docstring
 # from warnings import catch_warnings
 
+import ast
+import logging
+import os
+import subprocess
+
 import duckdb
 import pandas as pd
-import ast
 import streamlit as st
+
+if "data" not in os.listdir():
+    logging.error(os.listdir())
+    logging.error("creting data repository")
+    os.mkdir("data")
+
+if "exo_sql.duckdb" not in os.listdir("data"):
+    subprocess.run(["python", "init_db.py"])
 
 con = duckdb.connect(database="data/exo_sql.duckdb", read_only=False)
 

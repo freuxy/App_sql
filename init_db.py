@@ -28,32 +28,32 @@ muffin,3
 food_items = pd.read_csv(io.StringIO(CSV2))
 con.execute("CREATE TABLE IF NOT EXISTS food_items AS SELECT * FROM food_items")
 
-size = '''
+size = """
 size
 XS
 M
 L
 XL
-'''
+"""
 
-size= pd.read_csv(io.StringIO(size))
+size = pd.read_csv(io.StringIO(size))
 con.execute("CREATE TABLE IF NOT EXISTS size AS SELECT * FROM size")
 
-trademark = '''
+trademark = """
 trademark
 Nike
 Asphalte
 Abercrombie
 Lewis
-'''
+"""
 
-trademark=pd.read_csv(io.StringIO(trademark))
+trademark = pd.read_csv(io.StringIO(trademark))
 con.execute("CREATE TABLE IF NOT EXISTS trademark AS SELECT * FROM trademark")
 
 data = {
     "theme": ["cross_join", "cross_join"],
     "exercice_name": ["beverages_and_food", "size_and_trademark"],
-    "tables": [["beverages", "food_items"], ["size","trademark"]],
+    "tables": [["beverages", "food_items"], ["size", "trademark"]],
     "last_reviewed": ["2000-01-01", "1994-04-05"],
 }
 

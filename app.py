@@ -17,23 +17,28 @@ st.header("SQL coach vous accompagne dans la révision de vos requêtes")
 query = st.text_area(label="Veuillez saisir votre requête", key="user_input")
 
 with st.sidebar:
-        theme = st.selectbox(
-            "Quelle notion voulez-vous apprendre?",
-            ("cross_join", "CTE", "window_functions"),
-            index=None,
-            placeholder="Select a theme",
-        )
-        st.write("Vous avez choisi:", theme)
-        choix = con.execute(f"SELECT * FROM memory_state_df WHERE theme = '{theme}' ").df().sort_values(by='last_reviewed', ascending=False).reset_index()
-        st.write(choix)
+    theme = st.selectbox(
+        "Quelle notion voulez-vous apprendre?",
+        ("cross_join", "CTE", "window_functions"),
+        index=None,
+        placeholder="Select a theme",
+    )
+    st.write("Vous avez choisi:", theme)
+    choix = (
+        con.execute(f"SELECT * FROM memory_state_df WHERE theme = '{theme}' ")
+        .df()
+        .sort_values(by="last_reviewed", ascending=False)
+        .reset_index()
+    )
+    st.write(choix)
 
 try:
     exercises_df = choix.loc[0, "exercice_name"]
     with open(f"answer/{exercises_df}.sql", "r") as f:
-        answer=f.read()
+        answer = f.read()
     solution_df = con.execute(answer).df()
 except KeyError:
-    solution_df=pd.DataFrame()
+    solution_df = pd.DataFrame()
 
 if query:
     res = con.execute(query).df()
@@ -42,7 +47,7 @@ if query:
     try:
         res = res[solution_df.columns]
         st.dataframe(res.compare(solution_df))
-    except (KeyError,NameError, ValueError):
+    except (KeyError, NameError, ValueError):
         st.write("Les colonnes ne sont pas dans le bon ordre")
 
     if len(res.columns) != len(solution_df.columns):
@@ -55,9 +60,6 @@ if query:
             f"Votre resultat n'a pas le même nombre de ligne "
             f"que la solution souhaitée. Il vous manque {dif} lignes "
         )
-
-
-
 
 
 tab2, tab3 = st.tabs(["Tables", "Solution"])

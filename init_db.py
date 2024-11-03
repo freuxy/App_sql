@@ -1,4 +1,5 @@
 import io
+
 import duckdb
 import pandas as pd
 
@@ -62,3 +63,6 @@ memory_state_df = pd.DataFrame(data)
 con.execute(
     "CREATE TABLE IF NOT EXISTS memory_state_df AS SELECT * from memory_state_df"
 )
+
+
+con.close()

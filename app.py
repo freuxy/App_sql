@@ -48,13 +48,13 @@ with st.sidebar:
     )
     st.write(choix)
 
-# try:
-exercises_df = choix.loc[0, "exercice_name"]
-with open(f"answer/{exercises_df}.sql", "r") as f:
-    answer = f.read()
-solution_df = con.execute(answer).df()
-# except KeyError:
-solution_df = pd.DataFrame()
+try:
+    exercises_df = choix.loc[0, "exercice_name"]
+    with open(f"answer/{exercises_df}.sql", "r") as f:
+        answer = f.read()
+    solution_df = con.execute(answer).df()
+except KeyError:
+    solution_df = pd.DataFrame()
 
 if query:
     res = con.execute(query).df()

@@ -16,8 +16,8 @@ if "data" not in os.listdir():
     os.mkdir("data")
 
 if "exo_sql.duckdb" not in os.listdir("data"):
-    exec(open("init_db.py").read())
-    # subprocess.run(["python", "init_db.py"])
+    #exec(open("init_db.py").read())
+    subprocess.run(["python", "init_db.py"])
 
 con = duckdb.connect(database="data/exo_sql.duckdb", read_only=False)
 

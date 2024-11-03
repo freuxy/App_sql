@@ -8,47 +8,41 @@ import streamlit as st
 
 con = duckdb.connect(database="data/exo_sql.duckdb", read_only=False)
 
-# beverages = con.execute("SELECT * FROM beverages").df()
-# food_items = con.execute("SELECT * FROM food_items").df()
 exercice = con.execute("SELECT * FROM memory_state_df").df()
 
 
-st.write("SQL coach vous accompagne dans la révision de vos requêtes")
+st.header("SQL coach vous accompagne dans la révision de vos requêtes")
 
 
 query = st.text_area(label="Veuillez saisir votre requête", key="user_input")
 
 with st.sidebar:
-    theme = st.selectbox(
-        "Quelle notion voulez-vous apprendre?",
-        ("cross_join", "CTE", "window_functions"),
-        index=None,
-        placeholder="Select a theme",
-    )
-    st.write("Vous avez choisi:", theme)
-    choix = con.execute(f"SELECT * FROM memory_state_df WHERE theme = '{theme}' ").df()
-    st.write(choix)
+        theme = st.selectbox(
+            "Quelle notion voulez-vous apprendre?",
+            ("cross_join", "CTE", "window_functions"),
+            index=None,
+            placeholder="Select a theme",
+        )
+        st.write("Vous avez choisi:", theme)
+        choix = con.execute(f"SELECT * FROM memory_state_df WHERE theme = '{theme}' ").df().sort_values(by='last_reviewed', ascending=False).reset_index()
+        st.write(choix)
 
-
-ANSWER = """
-   SELECT *
-   FROM beverages
-   CROSS JOIN food_items
-
-   """
-"""
-   solution_df = duckdb.sql(ANSWER).df()
-   st.write(solution_df)
-"""
+try:
+    exercises_df = choix.loc[0, "exercice_name"]
+    with open(f"answer/{exercises_df}.sql", "r") as f:
+        answer=f.read()
+    solution_df = con.execute(answer).df()
+except KeyError:
+    solution_df=pd.DataFrame()
 
 if query:
     res = con.execute(query).df()
     st.dataframe(res)
-"""
+
     try:
         res = res[solution_df.columns]
         st.dataframe(res.compare(solution_df))
-    except KeyError:
+    except (KeyError,NameError, ValueError):
         st.write("Les colonnes ne sont pas dans le bon ordre")
 
     if len(res.columns) != len(solution_df.columns):
@@ -63,16 +57,23 @@ if query:
         )
 
 
-"""
+
 
 
 tab2, tab3 = st.tabs(["Tables", "Solution"])
 
 with tab2:
-    exercises_df = choix.loc[0, "tables"]
-    for elt in exercises_df:
-        data = con.execute(f"SELECT * FROM {elt}")
-        st.dataframe(data)
+    try:
+        exercises_df = choix.loc[0, "tables"]
+        for elt in exercises_df:
+            data = con.execute(f"SELECT * FROM {elt}")
+            st.dataframe(data)
+    except KeyError:
+        st.header("veuillez choisir un exercice")
 
 with tab3:
-    st.write("Test")
+    try:
+        st.write(answer)
+        st.write(solution_df)
+    except NameError:
+        st.header("veuillez choisir un exercice")

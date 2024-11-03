@@ -1,13 +1,13 @@
 import io
 
-# import duckdb
-try:
-    import duckdb
-except ImportError as e:
-    print("Erreur d'import de duckdb:", e)
-    raise
-
+import duckdb
 import pandas as pd
+
+# try:
+#    import duckdb
+# except ImportError as e:
+#    print("Erreur d'import de duckdb:", e)
+#    raise
 
 con = duckdb.connect(database="data/exo_sql.duckdb", read_only=False)
 

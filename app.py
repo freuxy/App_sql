@@ -58,7 +58,12 @@ except KeyError:
 
 if query:
     res = con.execute(query).df()
-    st.dataframe(res)
+    try:
+        st.dataframe(res)
+    except duckdb.CatalogException:
+        st.write("Erreur : La table spécifiée n'existe pas.")
+    except Exception as e:
+        st.write(f"Erreur de syntaxe SQL : {e}")
 
     try:
         res = res[solution_df.columns]

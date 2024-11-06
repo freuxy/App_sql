@@ -34,10 +34,10 @@ def user_answer_checking(user_query: str) -> Boolean:
     1) Vérifier la taille des lignes et des colonnes
     2) Comparer le contenu de la dataframe resultat et celle issue de la requête de l'utilisateur
     :param user_query: un string contenant la requête de l'utilisateur
-    :return: None
+    :return: Boolean
     """
     res = con.execute(user_query).df()
-    ans=False
+    ans = False
     try:
         st.dataframe(res)
     except duckdb.CatalogException:
@@ -70,6 +70,12 @@ def user_answer_checking(user_query: str) -> Boolean:
 
 
 def update_time(user_theme: str, user_exo: str) -> None:
+    """
+    Fonction pour mettre à jour la date de dernière pratique de l'exercice
+    :param user_theme: String
+    :param user_exo: String
+    :return: None
+    """
     if user_answer_checking(query):
         today = date.datetime.now()
         st.write(today)
@@ -128,7 +134,8 @@ if query:
 else:
     st.markdown(
         "<span style='color: red;'>Veuillez écrire une requête et pressez CMD+ENTRER. Assurez-vous d'avoir choisi une thématique</span>",
-        unsafe_allow_html=True)
+        unsafe_allow_html=True,
+    )
     time.sleep(5)
     st.rerun()
 

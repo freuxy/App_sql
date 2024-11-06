@@ -4,11 +4,14 @@
 import ast
 import logging
 import os
-import subprocess
 
 import duckdb
-import pandas as pd
 import streamlit as st
+import datetime as date
+import time
+
+from narwhals import Boolean
+
 import init_db
 
 
@@ -135,7 +138,7 @@ with tab2:
     try:
         exercises_df = choix.loc[0, "tables"]
         for elt in exercises_df:
-            data = con.execute(f"SELECT * FROM {elt}")
+            data = con.execute(f"SELECT * FROM {elt}").df()
             st.dataframe(data)
     except KeyError:
         st.header("veuillez choisir un exercice")

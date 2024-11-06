@@ -4,6 +4,7 @@
 import ast
 import logging
 import os
+import subprocess
 
 import duckdb
 import streamlit as st
@@ -20,10 +21,11 @@ if "data" not in os.listdir():
     logging.error("creating data repository")
     os.mkdir("data")
 
-# if "exo_sql.duckdb" not in os.listdir("data"):
-# exec(open("init_db.py").read())
-# logging.info("Initializing the database")
-# subprocess.run(["python", "init_db.py"])
+
+if "exo_sql.duckdb" not in os.listdir("data"):
+   #exec(open("init_db.py").read())
+   logging.info("Initializing the database")
+   subprocess.run(["python", "init_db.py"])
 
 con = duckdb.connect(database="data/exo_sql.duckdb", read_only=False)
 

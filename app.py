@@ -92,7 +92,11 @@ exercice = con.execute("SELECT * FROM memory_state_df").df()
 st.header("SQL coach vous accompagne dans la révision de vos requêtes")
 
 
-query = st.text_area(label="Veuillez saisir votre requête", key="user_input", placeholder="Select * from beverages")
+query = st.text_area(
+    label="Veuillez saisir votre requête",
+    key="user_input",
+    placeholder="Select * from beverages",
+)
 list_theme_query = """
 SELECT DISTINCT theme
 FROM memory_state_df
@@ -120,7 +124,6 @@ with st.sidebar:
         .reset_index(drop=True)
     )
     st.write(choix)
-
 
     if st.button("Réinitialiser les dates de soumission", type="secondary"):
         con.execute("UPDATE memory_state_df SET last_reviewed='1994-04-05'")

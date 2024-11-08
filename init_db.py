@@ -3,72 +3,67 @@ import io
 import duckdb
 import pandas as pd
 
-# try:
-#    import duckdb
-# except ImportError as e:
-#    print("Erreur d'import de duckdb:", e)
-#    raise
 
-con = duckdb.connect(database="data/exo_sql.duckdb", read_only=False)
+def init_db():
 
-# *********************************************************************
-# CROSS JOIN EXERCICES
-# *********************************************************************
+    con = duckdb.connect(database="data/exo_sql.duckdb", read_only=False)
 
-CSV = """
-beverage,price
-orange juice,2.5
-Expresso,2
-Tea,3
-"""
+    # *********************************************************************
+    # CROSS JOIN EXERCICES
+    # *********************************************************************
 
-beverages = pd.read_csv(io.StringIO(CSV))
-con.execute("CREATE TABLE IF NOT EXISTS beverages AS SELECT * FROM beverages")
+    CSV = """
+    beverage,price
+    orange juice,2.5
+    Expresso,2
+    Tea,3
+    """
 
-CSV2 = """
-food_item,food_price
-cookie juice,2.5
-chocolatine,2
-muffin,3
-"""
+    beverages = pd.read_csv(io.StringIO(CSV))
+    con.execute("CREATE TABLE IF NOT EXISTS beverages AS SELECT * FROM beverages")
 
-food_items = pd.read_csv(io.StringIO(CSV2))
-con.execute("CREATE TABLE IF NOT EXISTS food_items AS SELECT * FROM food_items")
+    CSV2 = """
+    food_item,food_price
+    cookie juice,2.5
+    chocolatine,2
+    muffin,3
+    """
 
-size = """
-size
-XS
-M
-L
-XL
-"""
+    food_items = pd.read_csv(io.StringIO(CSV2))
+    con.execute("CREATE TABLE IF NOT EXISTS food_items AS SELECT * FROM food_items")
 
-size = pd.read_csv(io.StringIO(size))
-con.execute("CREATE TABLE IF NOT EXISTS size AS SELECT * FROM size")
+    size = """
+    size
+    XS
+    M
+    L
+    XL
+    """
 
-trademark = """
-trademark
-Nike
-Asphalte
-Abercrombie
-Lewis
-"""
+    size = pd.read_csv(io.StringIO(size))
+    con.execute("CREATE TABLE IF NOT EXISTS size AS SELECT * FROM size")
 
-trademark = pd.read_csv(io.StringIO(trademark))
-con.execute("CREATE TABLE IF NOT EXISTS trademark AS SELECT * FROM trademark")
+    trademark = """
+    trademark
+    Nike
+    Asphalte
+    Abercrombie
+    Lewis
+    """
 
-data = {
-    "theme": ["cross_join", "cross_join"],
-    "exercice_name": ["beverages_and_food", "size_and_trademark"],
-    "tables": [["beverages", "food_items"], ["size", "trademark"]],
-    "last_reviewed": ["2000-01-01", "1994-04-05"],
-}
+    trademark = pd.read_csv(io.StringIO(trademark))
+    con.execute("CREATE TABLE IF NOT EXISTS trademark AS SELECT * FROM trademark")
 
+    data = {
+        "theme": ["cross_join", "cross_join"],
+        "exercice_name": ["beverages_and_food", "size_and_trademark"],
+        "tables": [["beverages", "food_items"], ["size", "trademark"]],
+        "last_reviewed": ["2000-01-01", "1994-04-05"],
+    }
 
-memory_state_df = pd.DataFrame(data)
-con.execute(
-    "CREATE TABLE IF NOT EXISTS memory_state_df AS SELECT * from memory_state_df"
-)
+    memory_state_df = pd.DataFrame(data)
+    con.execute(
+        "CREATE TABLE IF NOT EXISTS memory_state_df AS SELECT * from memory_state_df"
+    )
 
-
-con.close()
+    con.close()

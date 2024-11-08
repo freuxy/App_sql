@@ -13,7 +13,7 @@ import time
 
 from narwhals import Boolean
 
-import init_db
+from init_db import init_db
 
 
 if "data" not in os.listdir():
@@ -23,9 +23,10 @@ if "data" not in os.listdir():
 
 
 if "exo_sql.duckdb" not in os.listdir("data"):
+    init_db()
     # exec(open("init_db.py").read())
-    logging.info("Initializing the database")
-    subprocess.run(["python", "init_db.py"])
+    # logging.info("Initializing the database")
+    # subprocess.run(["python", "init_db.py"])
 
 con = duckdb.connect(database="data/exo_sql.duckdb", read_only=False)
 
@@ -123,6 +124,12 @@ with st.sidebar:
     )
     st.write(choix)
 
+    # left, right = st.rows(2)
+
+    if st.button("Réinitialiser les dates de soumission", type="secondary"):
+        con.execute("UPDATE memory_state_df SET last_reviewed='1994-04-05'")
+        st.rerun()
+
 
 exercises_df = choix.loc[0, "exercice_name"]
 with open(f"answer/{exercises_df}.sql", "r") as f:
@@ -138,8 +145,9 @@ else:
         "<span style='color: red;'>Veuillez écrire une requête et pressez CMD+ENTRER. Assurez-vous d'avoir choisi une thématique</span>",
         unsafe_allow_html=True,
     )
-    time.sleep(5)
+    time.sleep(3)
     st.rerun()
+
 
 tab2, tab3 = st.tabs(["Tables", "Solution"])
 

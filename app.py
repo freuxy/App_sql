@@ -24,9 +24,6 @@ if "data" not in os.listdir():
 
 if "exo_sql.duckdb" not in os.listdir("data"):
     init_db()
-    # exec(open("init_db.py").read())
-    # logging.info("Initializing the database")
-    # subprocess.run(["python", "init_db.py"])
 
 con = duckdb.connect(database="data/exo_sql.duckdb", read_only=False)
 
@@ -95,7 +92,11 @@ exercice = con.execute("SELECT * FROM memory_state_df").df()
 st.header("SQL coach vous accompagne dans la révision de vos requêtes")
 
 
-query = st.text_area(label="Veuillez saisir votre requête", key="user_input")
+query = st.text_area(
+    label="Veuillez saisir votre requête",
+    key="user_input",
+    placeholder="Select * from beverages",
+)
 list_theme_query = """
 SELECT DISTINCT theme
 FROM memory_state_df
@@ -123,8 +124,6 @@ with st.sidebar:
         .reset_index(drop=True)
     )
     st.write(choix)
-
-    # left, right = st.rows(2)
 
     if st.button("Réinitialiser les dates de soumission", type="secondary"):
         con.execute("UPDATE memory_state_df SET last_reviewed='1994-04-05'")
